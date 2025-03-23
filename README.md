@@ -12,15 +12,15 @@ Windows use `LoadLibrary` to load dll dynamically at run time while MacOS, Unix 
 
 DLL_HANDLE LoadLib(const char* dll)
 {
-	return ::LoadLibraryA(dll);
+    return ::LoadLibraryA(dll);
 }
 BOOL FreeLib(DLL_HANDLE handle)
 {
-	return ::FreeLibrary(handle);
+    return ::FreeLibrary(handle);
 }
 DLL_FUNC_PTR GetFunction(DLL_HANDLE handle, const char* funcName)
 {
-	return ::GetProcAddress(handle, funcName);
+    return ::GetProcAddress(handle, funcName);
 }
 #else
 
@@ -31,15 +31,15 @@ DLL_FUNC_PTR GetFunction(DLL_HANDLE handle, const char* funcName)
 
 DLL_HANDLE LoadLib(const char* dll)
 {
-	return dlopen(dll, RTLD_LAZY);
+    return dlopen(dll, RTLD_LAZY);
 }
 int FreeLib(DLL_HANDLE handle)
 {
-	return dlclose(handle);
+    return dlclose(handle);
 }
 DLL_FUNC_PTR GetFunction(DLL_HANDLE handle, const char* funcName)
 {
-	return dlsym(handle, funcName);
+    return dlsym(handle, funcName);
 }
 #endif
 ```
@@ -50,24 +50,24 @@ The example to load and get function address of `bar` as shown below. I use C++1
 int main()
 {
 #ifdef _MSC_VER
-	const char* libName = "MyLibrary.dll";
+    const char* libName = "MyLibrary.dll";
 #elif defined(__APPLE__)
-	const char* libName = "libMyLibrary.dylib";
+    const char* libName = "libMyLibrary.dylib";
 #endif
 
-	DLL_HANDLE handle = LoadLib(libName);
+    DLL_HANDLE handle = LoadLib(libName);
 
-	if (handle == NULL)
-	{
-		fprintf(stderr, "Loading %s fails\n", libName);
-		return 1;
-	}
+    if (handle == NULL)
+    {
+        fprintf(stderr, "Loading %s fails\n", libName);
+        return 1;
+    }
 
-	decltype(bar)* fun_ptr = (decltype(bar)*)(GetFunction(handle, "bar"));
+    decltype(bar)* fun_ptr = (decltype(bar)*)(GetFunction(handle, "bar"));
 
-	printf("bar : %d\n", fun_ptr());
+    printf("bar : %d\n", fun_ptr());
 
-	return 0;
+    return 0;
 }
 ```
 
