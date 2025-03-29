@@ -10,15 +10,15 @@ Windows use `LoadLibrary` to load dll dynamically at run time while MacOS, Unix 
 #define DLL_HANDLE HMODULE
 #define DLL_FUNC_PTR FARPROC
 
-DLL_HANDLE LoadLib(const char* dll)
+inline DLL_HANDLE LoadLib(const char* dll)
 {
     return ::LoadLibraryA(dll);
 }
-BOOL FreeLib(DLL_HANDLE handle)
+inline BOOL FreeLib(DLL_HANDLE handle)
 {
     return ::FreeLibrary(handle);
 }
-DLL_FUNC_PTR GetFunction(DLL_HANDLE handle, const char* funcName)
+inline DLL_FUNC_PTR GetFunction(DLL_HANDLE handle, const char* funcName)
 {
     return ::GetProcAddress(handle, funcName);
 }
@@ -29,15 +29,15 @@ DLL_FUNC_PTR GetFunction(DLL_HANDLE handle, const char* funcName)
 #define DLL_HANDLE void*
 #define DLL_FUNC_PTR void*
 
-DLL_HANDLE LoadLib(const char* dll)
+inline DLL_HANDLE LoadLib(const char* dll)
 {
     return dlopen(dll, RTLD_LAZY);
 }
-int FreeLib(DLL_HANDLE handle)
+inline int FreeLib(DLL_HANDLE handle)
 {
     return dlclose(handle);
 }
-DLL_FUNC_PTR GetFunction(DLL_HANDLE handle, const char* funcName)
+inline DLL_FUNC_PTR GetFunction(DLL_HANDLE handle, const char* funcName)
 {
     return dlsym(handle, funcName);
 }
